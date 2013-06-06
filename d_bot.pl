@@ -63,7 +63,7 @@ my @urls = (
     "http://feeds2.feedburner.com/solidot",
     "http://rss.slashdot.org/Slashdot/slashdot",
     "http://www.36kr.com/feed",
-    "http://pansci.tw/feed",
+    "http://feeds.feedburner.com/Pansci",
     "http://feeds.feedburner.com/thehackersnews",
     "http://feeds2.feedburner.com/thenextweb",
     "http://security-sh3ll.blogspot.com/feeds/posts/default",

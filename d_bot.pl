@@ -172,7 +172,7 @@ sub privmsg_handler {
         says("$user: Boodbye, everyone");
         die "shutdown by my master";
     }
-    elsif ($message =~ /^(dict|yd):?\s*(\w+)/i) {
+    elsif ($message =~ /^(dict|yd):?\s*(.*)$/i) {
         Dict($2, $user);
     }
     # Youtube
@@ -256,7 +256,7 @@ sub Dict {
     # find nothing: $r = []
     if (!defined $r->[0]) {
         say "nothing";
-        return "No reslut. for $_[0]  :'(";
+        says("$user: No reslut. for $lookup  :'(");
     }
     else {
         say @$r;

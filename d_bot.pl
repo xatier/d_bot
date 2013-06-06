@@ -168,6 +168,10 @@ sub privmsg_handler {
     if ($message =~ /$nick:\s+ping/i) {
         says("$user: pong");
     }
+    elsif ($message =~ /$nick:\s+die/i and $user =~ "darkx") {
+        says("$user: Boodbye, everyone");
+        die "shutdown by my master";
+    }
     elsif ($message =~ /^(dict|yd):?\s*(\w+)/i) {
         Dict($2, $user);
     }

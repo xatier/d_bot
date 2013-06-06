@@ -140,7 +140,9 @@ while (1) {
         next;
     }
 
-    chomp $input;
+    # remove \r\n
+    chop $input;
+    chop $input;
     # print the raw line received by the bot.
     say "--> $input" if $input;
     if ($input =~ /^PING(.*)$/i) {
@@ -241,11 +243,17 @@ sub Dict {
 
     my ($msg, $user) = @_;
 
-    say "Dict: $msg";
+    say "Dict: [$msg]";
+
 
     # get the string which our user want to lookup
-    my $lookup = "\'$msg\'";
+    my $lookup = "'" . $msg . "'";
     say "$lookup";
+
+    if ($msg =~ /[^\w\s]/) {
+        says("$user: 你想要做什麼... ->  $lookup");
+        return;
+    }
 
     # chect it in ydict
     my $result = `./ydict -c $lookup`;
@@ -256,7 +264,7 @@ sub Dict {
     # find nothing: $r = []
     if (!defined $r->[0]) {
         say "nothing";
-        says("$user: No reslut. for $lookup  :'(");
+        says("$user: No reslut. for $lookup  :\'(");
     }
     else {
         say @$r;

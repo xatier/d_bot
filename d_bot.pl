@@ -61,10 +61,13 @@ use constant {
 # rss subscriptions
 my @urls = (
     "http://feeds2.feedburner.com/solidot",
+    "http://rss.slashdot.org/Slashdot/slashdot",
     "http://www.36kr.com/feed",
     "http://pansci.tw/feed",
     "http://feeds.feedburner.com/thehackersnews",
     "http://feeds2.feedburner.com/thenextweb",
+    "http://security-sh3ll.blogspot.com/feeds/posts/default",
+    "http://blog.xuite.net/big.max/Polo/rss.xml",
     "http://blog.gslin.org/feed",
     "http://feeds.feedburner.com/xxddite",
     "http://xdite-smalltalk.tumblr.com/rss",

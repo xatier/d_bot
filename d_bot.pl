@@ -66,6 +66,7 @@ my @urls = (
     "http://feeds.feedburner.com/Pansci",
     "http://feeds.feedburner.com/thehackersnews",
     "http://feeds2.feedburner.com/thenextweb",
+    "http://mmdays.com/feed/",
     "http://security-sh3ll.blogspot.com/feeds/posts/default",
     "http://blog.xuite.net/big.max/Polo/rss.xml",
     "http://blog.gslin.org/feed",
@@ -148,6 +149,7 @@ while (1) {
     if ($input =~ /^PING(.*)$/i) {
         # We must respond to PINGs to avoid being disconnected.
         print $sock "PONG $1\r\n";
+        say "reply ping request";
     }
     elsif($input =~ /^:([^!]*)!(\S*) PRIVMSG (#\S+) :(.*)$/) {
         # PRIVMSG format:
@@ -210,7 +212,13 @@ sub rss_handler {
     # fetch again
     for my $url (@urls) {
         print "looking $url ...";
-        my $feed = XML::Feed->parse(URI->new($url)) or warn XML::Feed->errstr;
+        eval {
+            my $feed = XML::Feed->parse(URI->new($url)) or warn XML::Feed->errstr;
+        };
+        if ($@) {
+            say "!! fetch error on: $url";
+            next;     # skip
+        }
         # fetch okay
         if ($feed) {
             my $entry = shift [$feed->entries];
@@ -218,7 +226,14 @@ sub rss_handler {
             my $digest = Digest::MD5::md5_hex($url);
             if ($rss_collected{$digest}->[1] ne $entry->title) {
                 say "on update";
-                my $short =  makeashorterlink($entry->link);
+
+                eval {
+                    my $short =  makeashorterlink($entry->link);
+                };
+                if ($@) {
+                    say "!! url shorten $entry->link error";
+                    my $short = $entry->link;  # use the original feed url
+                }
 
                 says(RED . BLINK . "New RSS feed " . NORMAL .
                      "@" . scalar localtime);
@@ -337,6 +352,7 @@ sub Youtube {
 
 sub get_title {
     my $url = shift;
+    $url =~ s/http/https/ if $url =~ /youtube\.com/;
     my $mech = WWW::Mechanize->new();
     $mech->get( $url );
     return $mech->title;
